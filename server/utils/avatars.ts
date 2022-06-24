@@ -27,6 +27,7 @@ export async function generateAvatarUrl({
       // okay
     }
   }
+  // const tileyUrl = "https://cdn-icons-png.flaticon.com/512/147/147144.png";
 
   const tileyUrl = `${
     env.DEFAULT_AVATAR_HOST

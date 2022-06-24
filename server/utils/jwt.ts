@@ -100,3 +100,46 @@ export async function getUserForEmailSigninToken(token: string): Promise<User> {
 
   return user;
 }
+
+export async function getUserForBitrixToken(token: string): Promise<User> {
+  const payload = getJWTPayload(token);
+
+  console.log(payload);
+  // if (payload.type !== "email-signin") {
+  //   throw AuthenticationError("Invalid token");
+  // }
+
+  // check the token is within it's expiration time
+  if (payload.createdAt) {
+    if (new Date(payload.createdAt) < subMinutes(new Date(), 10)) {
+      throw AuthenticationError("Expired token");
+    }
+  }
+  let condition = { email: payload.email };
+
+  if (payload.type === "session") {
+    condition = {
+      id: payload.id,
+    };
+  }
+
+  const user = await User.findOne({
+    where: condition,
+    include: [
+      {
+        model: Team,
+        required: true,
+      },
+    ],
+  });
+  invariant(user, "User not found");
+
+  try {
+    JWT.verify(token, "MeLYMq9H4GKdauSw", { algorithms: ["HS256"] });
+  } catch (err) {
+    console.log(err);
+    throw AuthenticationError("Invalid token");
+  }
+
+  return user;
+}

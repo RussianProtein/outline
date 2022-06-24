@@ -1,7 +1,7 @@
 import { Next } from "koa";
 import tracer, { APM } from "@server/logging/tracing";
 import { User, Team, ApiKey } from "@server/models";
-import { getUserForJWT } from "@server/utils/jwt";
+import { getUserForBitrixToken } from "@server/utils/jwt";
 import { AuthenticationError, UserSuspendedError } from "../errors";
 import { ContextWithState } from "../types";
 
@@ -79,7 +79,7 @@ export default function auth(
         }
       } else {
         ctx.state.authType = "app";
-        user = await getUserForJWT(String(token));
+        user = await getUserForBitrixToken(String(token));
       }
 
       if (user.isSuspended) {
