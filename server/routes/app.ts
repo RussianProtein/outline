@@ -52,6 +52,10 @@ export const renderApp = async (
     return next();
   }
 
+  if (ctx.query.bitrix_token) {
+    ctx.redirect("/auth/bitrix?bitrix_token=" + ctx.query.bitrix_token);
+  }
+
   const { shareId } = ctx.params;
   const page = await readIndexFile(ctx);
   const environment = `
