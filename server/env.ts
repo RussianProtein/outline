@@ -43,7 +43,7 @@ export class Environment {
    * The current envionment name.
    */
   @IsIn(["development", "production", "staging", "test"])
-  public ENVIRONMENT = process.env.NODE_ENV ?? "production";
+  public ENVIRONMENT = process.env.NODE_ENV ?? "development";
 
   /**
    * The secret key is used for encrypting data. Do not change this value once
