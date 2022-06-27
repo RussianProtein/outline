@@ -105,11 +105,6 @@ export async function getUserForEmailSigninToken(token: string): Promise<User> {
 export async function getUserForBitrixToken(token: string): Promise<User> {
   const payload = getJWTPayload(token);
 
-  console.log(payload);
-  // if (payload.type !== "email-signin") {
-  //   throw AuthenticationError("Invalid token");
-  // }
-
   // check the token is within it's expiration time
   if (payload.exp) {
     if (new Date(payload.exp * 1000) < subMinutes(new Date(), 10)) {
@@ -140,9 +135,8 @@ export async function getUserForBitrixToken(token: string): Promise<User> {
   }
 
   try {
-    JWT.verify(token, env.JWT_SECRET, { algorithms: env.JWT_ALGORITHM });
+    JWT.verify(token, env.JWT_SECRET);
   } catch (err) {
-    console.log(err);
     throw AuthenticationError("Invalid token");
   }
 

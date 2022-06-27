@@ -17,7 +17,7 @@ router.use(methodOverride());
 
 router.get("bitrix", async (ctx) => {
   const { bitrix_token } = ctx.request.query;
-  console.log(bitrix_token);
+
   assertPresent(bitrix_token, "token is required");
 
   let user!: User;

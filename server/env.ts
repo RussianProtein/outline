@@ -66,12 +66,6 @@ export class Environment {
   public JWT_SECRET = `${process.env.JWT_SECRET}`;
 
   /**
-   * JWT ALGORITHM "HS256"
-   */
-  @IsNotEmpty()
-  public JWT_ALGORITHM = `${process.env.JWT_ALGORITHM.split(" ")}`;
-
-  /**
    * URL
    */
   @IsNotEmpty()
