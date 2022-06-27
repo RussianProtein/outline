@@ -43,7 +43,7 @@ export class Environment {
    * The current envionment name.
    */
   @IsIn(["development", "production", "staging", "test"])
-  public ENVIRONMENT = process.env.NODE_ENV ?? "development";
+  public ENVIRONMENT = process.env.NODE_ENV ?? "production";
 
   /**
    * The secret key is used for encrypting data. Do not change this value once
@@ -58,6 +58,30 @@ export class Environment {
    */
   @IsNotEmpty()
   public UTILS_SECRET = `${process.env.UTILS_SECRET}`;
+
+  /**
+   * JWT SECRET "QSdaKFKJOwerq"
+   */
+  @IsNotEmpty()
+  public JWT_SECRET = `${process.env.JWT_SECRET}`;
+
+  /**
+   * JWT ALGORITHM "HS256"
+   */
+  @IsNotEmpty()
+  public JWT_ALGORITHM = `${process.env.JWT_ALGORITHM.split(" ")}`;
+
+  /**
+   * URL
+   */
+  @IsNotEmpty()
+  public USER_NOT_FOUND = `${process.env.USER_NOT_FOUND}`;
+
+  /**
+   * URL
+   */
+  @IsNotEmpty()
+  public TOKEN_EXPAIRED = `${process.env.TOKEN_EXPAIRED}`;
 
   /**
    * The url of the database.

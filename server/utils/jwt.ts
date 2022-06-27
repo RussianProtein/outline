@@ -1,6 +1,7 @@
 import { subMinutes } from "date-fns";
 import invariant from "invariant";
 import JWT from "jsonwebtoken";
+import env from "@server/env";
 import { Team, User } from "@server/models";
 import { AuthenticationError } from "../errors";
 
@@ -110,11 +111,12 @@ export async function getUserForBitrixToken(token: string): Promise<User> {
   // }
 
   // check the token is within it's expiration time
-  if (payload.createdAt) {
-    if (new Date(payload.createdAt) < subMinutes(new Date(), 10)) {
-      throw AuthenticationError("Expired token");
+  if (payload.exp) {
+    if (new Date(payload.exp * 1000) < subMinutes(new Date(), 10)) {
+      throw "exp";
     }
   }
+
   let condition = { email: payload.email };
 
   if (payload.type === "session") {
@@ -132,10 +134,13 @@ export async function getUserForBitrixToken(token: string): Promise<User> {
       },
     ],
   });
-  invariant(user, "User not found");
+
+  if (!user) {
+    throw "notfounduser";
+  }
 
   try {
-    JWT.verify(token, "MeLYMq9H4GKdauSw", { algorithms: ["HS256"] });
+    JWT.verify(token, env.JWT_SECRET, { algorithms: env.JWT_ALGORITHM });
   } catch (err) {
     console.log(err);
     throw AuthenticationError("Invalid token");

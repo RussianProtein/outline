@@ -1,4 +1,5 @@
 import Router from "koa-router";
+import env from "@server/env";
 import methodOverride from "@server/middlewares/methodOverride";
 import { User } from "@server/models";
 import { signIn } from "@server/utils/authentication";
@@ -24,9 +25,13 @@ router.get("bitrix", async (ctx) => {
   try {
     user = await getUserForBitrixToken(bitrix_token as string);
   } catch (err) {
-    ctx.redirect(
-      `https://portal.crm40.ru/outline/?error=token_expaired&url=https://portal.mgtniip.ru:4443/home`
-    );
+    if (err === "exp") {
+      ctx.redirect(env.TOKEN_EXPAIRED + env.URL);
+    } else if (err === "notfounduser") {
+      ctx.redirect(env.USER_NOT_FOUND + env.URL);
+    } else {
+      ctx.redirect(env.TOKEN_EXPAIRED + env.URL);
+    }
     return;
   }
 

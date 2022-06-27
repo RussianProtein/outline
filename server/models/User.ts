@@ -325,7 +325,7 @@ class User extends ParanoidModel {
         expiresAt: expiresAt ? expiresAt.toISOString() : undefined,
         type: "session",
       },
-      "MeLYMq9H4GKdauSw"
+      env.JWT_SECRET
     );
   };
 
