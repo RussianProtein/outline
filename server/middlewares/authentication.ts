@@ -1,7 +1,7 @@
 import { Next } from "koa";
 import tracer, { APM } from "@server/logging/tracing";
 import { User, Team, ApiKey } from "@server/models";
-import { getUserForBitrixToken } from "@server/utils/jwt";
+import { getUserForBitrixToken } from "@server/utils/jwtBitrix";
 import { AuthenticationError, UserSuspendedError } from "../errors";
 import { ContextWithState } from "../types";
 
