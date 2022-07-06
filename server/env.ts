@@ -72,6 +72,24 @@ export class Environment {
   public USER_NOT_FOUND = `${process.env.USER_NOT_FOUND}`;
 
   /**
+   * TEAM_NAME
+   */
+  @IsNotEmpty()
+  public TEAM_NAME = `${process.env.TEAM_NAME}`;
+
+  /**
+   * PROVIDER_NAME
+   */
+  @IsNotEmpty()
+  public PROVIDER_NAME = `${process.env.PROVIDER_NAME}`;
+
+  /**
+   * TEAM_NAME
+   */
+  @IsNotEmpty()
+  public PROVIDER_ID = `${process.env.PROVIDER_ID}`;
+
+  /**
    * URL
    */
   @IsNotEmpty()
