@@ -35,12 +35,13 @@ router.get("bitrix", async (ctx) => {
     } else if (err === "notfounduser") {
       const profile = getJWTPayload(bitrix_token as string);
 
+      const guid = formatGUID(profile.guid);
+
       const domain = profile.email.split("@")[1];
       const diplayName = profile.email.split("@")[0];
       const subdomain = domain.split(".")[0];
       const teamName = env.TEAM_NAME;
       const providerName = env.PROVIDER_NAME;
-      const provirderId = env.PROVIDER_ID;
 
       await accountProvisioner({
         ip: ctx.request.ip,
@@ -58,7 +59,7 @@ router.get("bitrix", async (ctx) => {
           providerId: domain,
         },
         authentication: {
-          providerId: provirderId,
+          providerId: guid,
           // @ts-expect-error ts-migrate(7005) FIXME: Variable 'scopes' implicitly has an 'any[]' type.
           scopes: scopes,
         },
@@ -95,6 +96,25 @@ function getJWTPayload(token: string) {
   } catch (err) {
     throw AuthenticationError("Unable to decode JWT token");
   }
+}
+
+function formatGUID(objectGUID: string) {
+  const data = new Buffer(objectGUID, "binary");
+
+  // GUID_FORMAT_D
+  let template = "{3}{2}{1}{0}-{5}{4}-{7}{6}-{8}{9}-{10}{11}{12}{13}{14}{15}";
+
+  // check each byte
+  for (let i = 0; i < data.length; i++) {
+    // get the current character from that byte
+    let dataStr = data[i].toString(16);
+    dataStr = data[i] >= 16 ? dataStr : "0" + dataStr;
+
+    // insert that character into the template
+    template = template.replace(new RegExp("\\{" + i + "\\}", "g"), dataStr);
+  }
+
+  return template;
 }
 
 export default router;
